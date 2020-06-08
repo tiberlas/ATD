@@ -1,0 +1,31 @@
+<div class="container">
+
+    <div class="row justify-content-around">
+        <div class="col">
+            <button (click)="onChangeDiv('START')" class="btn btn-outline-light"
+                [ngClass]="{active: showDiv == 'START'}">START AGENT</button>
+        </div>
+        <div class="col">
+            <button (click)="onChangeDiv('ACL')" class="btn btn-outline-light"
+                [ngClass]="{active: showDiv == 'ACL'}">SENT ACL</button>
+        </div>
+        <div class="col">
+            <button (click)="onChangeDiv('LOGGER')" class="btn btn-outline-light"
+                [ngClass]="{active: showDiv == 'LOGGER'}">LOGGER</button>
+        </div>
+    </div>
+    <hr class="bg-light">
+    <br>
+
+    <div *ngIf="showDiv == 'LOGGER'">
+        <app-logger></app-logger>
+    </div>
+
+    <div *ngIf="showDiv == 'START'">
+        <app-start-agent></app-start-agent>
+    </div>
+
+    <div *ngIf="showDiv == 'ACL'">
+        <app-create-acl></app-create-acl>
+    </div>
+</div>

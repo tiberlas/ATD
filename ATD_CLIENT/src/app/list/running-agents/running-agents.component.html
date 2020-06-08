@@ -1,0 +1,3 @@
+<div *ngFor="let agent of runningAgents.runningAgentArray; let i = index">
+    <app-agent [agent]="agent" (stop)="onStopAgent($event)"></app-agent>
+</div>

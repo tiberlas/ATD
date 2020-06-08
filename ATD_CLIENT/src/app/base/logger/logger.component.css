@@ -1,0 +1,9 @@
+textarea {
+    background-color: #343a40;
+    color: rgb(255, 255, 255);
+    height: 100%;
+    width: 100%;
+   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+}

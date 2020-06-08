@@ -1,0 +1,37 @@
+<div class="container">
+
+    <form (ngSubmit)="onCreateAgent(f)" #f="ngForm">
+
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputName" class="text-white">NAME</label>
+            </div>
+            <div class="col-8 pr-2">
+                <input type="text" class="form-control bg-dark text-light" id="InputName" name="InputName"
+                    placeholder="AGENT NAME" ngModel #InputName="ngModel" #InputName required />
+            </div>
+        </div>
+
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputType" class="text-white">TYPE</label>
+            </div>
+            <div class="col-8 pr-2">
+                <select class="form-control bg-dark text-light" name="InputType" id="InputType"
+                    [(ngModel)]="selectedType" required>
+                    <option value="">---</option>
+                    <option *ngFor="let x of types.agentTypeArray" value="{{x.type}}@{{x.module}}">
+                        {{x.type}}@{{x.module}}</option>
+                </select>
+
+            </div>
+        </div>
+
+        <br>
+        <div>
+            <button type="submit" class="btn btn-lg btn-outline-dark float-right" [disabled]="f.invalid">START</button>
+        </div>
+        <br>
+    </form>
+
+</div>

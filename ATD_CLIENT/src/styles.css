@@ -1,0 +1,10 @@
+@import url(~bootstrap/dist/css/bootstrap.min.css);
+
+.text-primary {
+    color: #ff55ff;
+}
+
+.bg-primary {
+    color: #ff55ff;
+    background-color: #ff55ff;
+}

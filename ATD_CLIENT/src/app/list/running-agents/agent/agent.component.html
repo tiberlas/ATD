@@ -1,0 +1,9 @@
+<span class="text text-white">
+    {{agent.agentName}}@{{agent.hostAlias}}
+    &nbsp;
+    <span class="badge badge-lg badge-light text text-secondary pl-1 pr-1">
+        {{agent.agentTypeName}}:{{agent.agentTypeModule}}
+    </span>
+    &nbsp;
+    <button (click)="onStop()" class="btn btn-outline-dark">STOP</button>
+</span>

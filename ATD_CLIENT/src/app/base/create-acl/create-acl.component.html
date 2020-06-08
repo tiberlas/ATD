@@ -1,0 +1,186 @@
+<div class="container">
+
+    <form (ngSubmit)="onSendACL(f)" #f="ngForm">
+
+        <!--PERFORMATIVE-->
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputPerformative" class="text-white">PERFORMATIVE</label>
+            </div>
+            <div class="col-8 pr-2">
+                <select class="form-control bg-dark text-light" name="InputPerformative" id="InputPerformative"
+                    [(ngModel)]="selectedPerformative" required>
+
+                    <!-- <option value="">---</option> -->
+                    <option *ngFor="let p of performativeArray" value="{{p}}">{{p}}</option>
+                </select>
+
+            </div>
+        </div>
+
+        <!--RECEIVER MULTIPLE SELECT-->
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputReceiver" class="text-white">RECEIVER</label>
+            </div>
+            <div class="col-8 pr-2">
+                <select class="form-control bg-dark text-light" name="InputReceiver" id="InputReceiver"
+                    [(ngModel)]="selectedReceiver" required>
+
+                    <!-- <option value="">---</option> -->
+                    <option *ngFor="let p of receiverArray" value="{{p}}">{{p}}</option>
+                </select>
+
+            </div>
+        </div>
+
+        <!--CONTENT-->
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputContent" class="text-white">CONTENT</label>
+            </div>
+            <div class="col-8 pr-2">
+                <input type="text" class="form-control bg-dark text-light" id="InputContent" name="InputContent"
+                    placeholder="CONTENT" ngModel #InputContent="ngModel" #InputContent required />
+            </div>
+        </div>
+
+        <!--SENDER-->
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputSender" class="text-white">SENDER</label>
+            </div>
+            <div class="col-8 pr-2">
+                <select class="form-control bg-dark text-light" name="InputSender" id="InputSender"
+                    [(ngModel)]="selectedSender" required>
+
+                    <!-- <option value="">---</option> -->
+                    <option *ngFor="let p of senderArray" value="{{p}}">{{p}}</option>
+                </select>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-1">
+                <span class="badge badge-dark">ADVANCE</span>
+            </div>
+            <div class="col-11">
+                <hr class="bg-dark">
+            </div>
+        </div>
+
+        <!--REPLAY TO-->
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputReplayTo" class="text-white">REPLAY TO</label>
+            </div>
+            <div class="col-8 pr-2">
+                <select class="form-control bg-dark text-light" name="InputReplayTo" id="InputReplayTo"
+                    [(ngModel)]="selectedReplayTo">
+
+                    <option value=null>---</option>
+                    <option *ngFor="let p of replayToArray" value="{{p}}">{{p}}</option>
+                </select>
+
+            </div>
+        </div>
+
+        <!--LANGUAGE-->
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputLanguage" class="text-white">LANGUAGE</label>
+            </div>
+            <div class="col-8 pr-2">
+                <input type="text" class="form-control bg-dark text-light" id="InputLanguage" name="InputLanguage"
+                    placeholder="LANGUAGE" ngModel #InputLanguage="ngModel" #InputLanguage />
+            </div>
+        </div>
+
+        <!--ENCODING-->
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputEncoding" class="text-white">ENCODING</label>
+            </div>
+            <div class="col-8 pr-2">
+                <input type="text" class="form-control bg-dark text-light" id="InputEncoding" name="InputEncoding"
+                    placeholder="ENCODING" ngModel #InputEncoding="ngModel" #InputEncoding />
+            </div>
+        </div>
+
+        <!--ONTOLOGY-->
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputOntology" class="text-white">ONTOLOGY</label>
+            </div>
+            <div class="col-8 pr-2">
+                <input type="text" class="form-control bg-dark text-light" id="InputOntology" name="InputOntology"
+                    placeholder="ONTOLOGY" ngModel #InputOntology="ngModel" #InputOntology />
+            </div>
+        </div>
+
+        <!--PROTOCOL-->
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputProtocol" class="text-white">PROTOCOL</label>
+            </div>
+            <div class="col-8 pr-2">
+                <input type="text" class="form-control bg-dark text-light" id="InputProtocol" name="InputProtocol"
+                    placeholder="PROTOCOL" ngModel #InputProtocol="ngModel" #InputProtocol />
+            </div>
+        </div>
+
+        <!--REPLAY WITH-->
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputReplayWith" class="text-white">REPLAY WITH</label>
+            </div>
+            <div class="col-8 pr-2">
+                <input type="text" class="form-control bg-dark text-light" id="InputReplayWith" name="InputReplayWith"
+                    placeholder="REPLAY WITH" ngModel #InputReplayWith="ngModel" #InputReplayWith />
+            </div>
+        </div>
+
+        <!--IN REPLAY TO-->
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputInReplayTo" class="text-white">IN REPLAY TO</label>
+            </div>
+            <div class="col-8 pr-2">
+                <input type="text" class="form-control bg-dark text-light" id="InputInReplayTo" name="InputInReplayTo"
+                    placeholder="IN REPLAY TO" ngModel #InputInReplayTo="ngModel" #InputInReplayTo />
+            </div>
+        </div>
+
+        <!--REPLAY BY-->
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputReplayBy" class="text-white">REPLAY BY</label>
+            </div>
+            <div class="col-8 pr-2">
+                <input type="text" class="form-control bg-dark text-light" id="InputReplayBy" name="InputReplayBy"
+                    placeholder="REPLAY BY" ngModel #InputReplayBy="ngModel" #InputReplayBy />
+            </div>
+        </div>
+
+        <!--CONVERSATION-->
+        <div class="row form-group justify-content-center">
+            <div class="col-4 pl-2">
+                <label for="InputConvarsation" class="text-white">CONVERSATION ID</label>
+            </div>
+            <div class="col-8 pr-2">
+                <input type="text" class="form-control bg-dark text-light" id="InputConvarsation"
+                    name="InputConvarsation" placeholder="CONVERSATION ID" ngModel #InputConvarsation="ngModel"
+                    #InputConvarsation />
+            </div>
+        </div>
+
+        <br>
+        <div>
+            <button type="submit" class="btn btn-lg btn-outline-dark float-right" [disabled]="f.invalid">SEND</button>
+        </div>
+        <br>
+        <br>
+    </form>
+
+</div>

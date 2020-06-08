@@ -1,0 +1,23 @@
+<div class="container">
+
+    <div>
+        <span class="text text-white">
+            agent types
+            &nbsp;&nbsp;&nbsp;
+            <button (click)="onToggleType()" class="btn btn-outline-light">
+                {{toggleType==true?'HIDE':'SHOW'}}
+            </button>
+        </span>
+        <app-agent-types *ngIf="toggleType == true"></app-agent-types>
+        <hr class="bg-white">
+    </div>
+
+    <div>
+        <span class="text text-white">
+            running agents
+        </span>
+        <br>
+        <app-running-agents></app-running-agents>
+    </div>
+
+</div>

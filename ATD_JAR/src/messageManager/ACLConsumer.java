@@ -11,6 +11,8 @@ import agentManager.ActiveAgentManagerLocal;
 import agents.Agent;
 import common.JsonObjMapper;
 import model.ACL;
+import model.AID;
+import model.AgentType;
 
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
@@ -33,9 +35,12 @@ public class ACLConsumer implements MessageListener {
 			String json = message.getStringProperty("ACL");
 			ACL acl = (ACL) jsonMapper.JsonToObj(json, ACL.class);
 			
+			System.out.println(acl);
+			
 			acl.getReceiverAIDs().forEach(aid -> {
 			
 				Agent agent = (Agent) agents.getAgent(aid);
+				
 				if(agent != null) {
 					agent.handleMessage(acl);
 				} else {
@@ -45,7 +50,10 @@ public class ACLConsumer implements MessageListener {
 			
 		} catch (JMSException e) {
 			System.out.println("JMS EXCEPTION");
-			//e.printStackTrace();
+			e.printStackTrace();
+		} catch(Exception e) {
+			System.out.println("EXCEPTION");
+			e.printStackTrace();
 		}
 	}
 }

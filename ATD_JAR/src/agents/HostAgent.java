@@ -10,6 +10,7 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
 
+import ContractNet.IniatorAgentRemote;
 import agentManager.ActiveAgentManagerLocal;
 import agentManager.OnLineAgentManagerlocal;
 import common.JsonObjMapper;
@@ -123,6 +124,29 @@ public class HostAgent implements HostAgentLocal {
 	@Override
 	public Host getHost() {
 		return host;
+	}
+	
+	@Override
+	public void startCN() {
+		final AgentType iniatorType = new AgentType("iniator", "contract-net-module");
+		final AgentType participantType = new AgentType("participant", "contract-net-module");
+		
+		Set<AID> all = activeManager.getAllActiveAgents();
+		List<AID> iniators = new ArrayList<AID>();
+		Set<AID> participants = new HashSet<AID>();
+		
+		all.forEach(a -> {
+			if(a.getType().equals(iniatorType)) {
+				iniators.add(a);
+			} else if(a.getType().equals(participantType)) {
+				participants.add(a);
+			}
+		});
+		
+		if(iniators.size() > 0 && participants.size() > 0) {
+			IniatorAgentRemote iag = (IniatorAgentRemote) activeManager.getAgent(iniators.get(0));
+			iag.startedCFP(participants);
+		}
 	}
 	
 	@Override

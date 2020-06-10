@@ -1,12 +1,12 @@
 import { Injectable, OnInit } from '@angular/core';
 import { AgentTypeModel } from '../model/agent-type.model';
-import { base_url } from 'src/environments/environment';
+import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { webSocket } from 'rxjs/webSocket';
 import { AgentWsTypeModel } from '../model/agent-ws-type.model';
 
-const BASE_HTTP = base_url.http;
-const BASE_WS = base_url.ws;
+const BASE_HTTP = environment.http;
+const BASE_WS = environment.ws;
 
 @Injectable({ providedIn: 'root' })
 export class AgentTypeService {

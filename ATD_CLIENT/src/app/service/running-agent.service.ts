@@ -1,12 +1,12 @@
 import { Injectable, OnInit } from '@angular/core';
 import { RunningAgentModel } from '../model/running-agent.model';
 import { HttpClient } from '@angular/common/http';
-import { base_url } from 'src/environments/environment';
+import { environment } from 'src/environments/environment';
 import { webSocket } from 'rxjs/webSocket';
 import { RunningWsAgentModel } from '../model/running-ws-agent.model';
 
-const BASE_HTTP = base_url.http;
-const BASE_WS = base_url.ws;
+const BASE_HTTP = environment.http;
+const BASE_WS = environment.ws;
 
 @Injectable({ providedIn: 'root' })
 export class RunningAgentService {

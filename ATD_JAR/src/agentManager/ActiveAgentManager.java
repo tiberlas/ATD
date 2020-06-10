@@ -8,8 +8,13 @@ import javax.ejb.Stateless;
 
 import org.omg.PortableServer.POAPackage.ObjectAlreadyActive;
 
+import ContractNet.IniatorAgent;
+import ContractNet.IniatorAgentRemote;
+import ContractNet.ParticipantAgent;
+import ContractNet.ParticipantAgentRemote;
 import agents.Agent;
-import agents.TestAgentLocal;
+import agents.TestAgentRemote;
+import common.JNDILookup;
 import dataBaseService.activeAgents.ActiveAgentsDataBaseLocal;
 import dataBaseService.activeTypes.ActiveTypesDataBaseLocal;
 import model.AID;
@@ -21,12 +26,8 @@ public class ActiveAgentManager implements ActiveAgentManagerLocal{
 
 	@EJB
 	private ActiveAgentsDataBaseLocal activeAgents;
-	
 	@EJB
 	private ActiveTypesDataBaseLocal activeTypes;
-	
-	@EJB
-	private TestAgentLocal testAgent;
 	
 	@Override
 	public Set<AID> getAllActiveAgents() {
@@ -55,6 +56,9 @@ public class ActiveAgentManager implements ActiveAgentManagerLocal{
 			if(!this.activeAgents.checkIfAgentIsRunning(agentAID)) {
 				
 				if(agentAID.getType().getModule().equals("test-module")) {
+					//TestAgentLocal testAgent = new TestAgent();
+					TestAgentRemote testAgent = JNDILookup.lookUp(JNDILookup.TestAgentLookup, TestAgentRemote.class);
+					
 					testAgent.startUp(agentAID);
 					
 					try {
@@ -62,6 +66,32 @@ public class ActiveAgentManager implements ActiveAgentManagerLocal{
 					} catch (ObjectAlreadyActive e) {
 						e.printStackTrace();
 					}
+				} else if(agentAID.getType().getModule().equals("contract-net-module")) {
+					
+					if(agentAID.getType().getName().equals("iniator")) {
+						
+						IniatorAgentRemote iniatorAgent = JNDILookup.lookUp(JNDILookup.IniatorAgentLookup, IniatorAgentRemote.class);
+						iniatorAgent.startUp(agentAID);
+						
+						try {
+							this.activeAgents.addRunningAgent(iniatorAgent);
+						} catch (ObjectAlreadyActive e) {
+							e.printStackTrace();
+						}
+					} else {
+						
+						ParticipantAgentRemote participantAgent = JNDILookup.lookUp(JNDILookup.ParticipantAgentLookup, ParticipantAgentRemote.class);
+						participantAgent.startUp(agentAID);
+						
+						try {
+							this.activeAgents.addRunningAgent(participantAgent);
+						} catch (ObjectAlreadyActive e) {
+							e.printStackTrace();
+						}
+					}
+					
+				} else {
+					
 				}
 			}			
 		}

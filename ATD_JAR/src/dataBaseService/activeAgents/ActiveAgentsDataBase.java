@@ -67,6 +67,7 @@ public class ActiveAgentsDataBase implements ActiveAgentsDataBaseLocal {
 	@Override
 	public void addRunningAgent(Agent agent) throws ObjectAlreadyActive {
 		if(!runningAgents.containsKey(agent.getAID())) {
+			System.out.println("ADDDED AGENT");
 			runningAgents.put(agent.getAID(), agent);
 		} else {
 			throw new ObjectAlreadyActive();

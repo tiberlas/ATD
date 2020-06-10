@@ -3,13 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
-};
-
-export const base_url = {
+  production: false,
   http: 'http://localhost:8080/ATD_WAR/ATD',
-  ws: 'ws://localhost:8080/ATD_WAR/ws',
-  production: false
+  ws: 'ws://localhost:8080/ATD_WAR/ws'
 };
 
 /*

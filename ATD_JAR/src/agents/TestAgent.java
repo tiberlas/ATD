@@ -2,6 +2,7 @@ package agents;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
+import javax.ejb.Remote;
 import javax.ejb.Stateful;
 
 import model.ACL;
@@ -10,7 +11,8 @@ import ws.ACLWS;
 
 @Stateful
 @LocalBean
-public class TestAgent implements TestAgentLocal {
+@Remote(TestAgentRemote.class)
+public class TestAgent implements TestAgentRemote {
 
 	private static final long serialVersionUID = 1L;
 

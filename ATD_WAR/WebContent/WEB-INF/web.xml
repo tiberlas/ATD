@@ -3,5 +3,13 @@
   <display-name>ATD_WAR</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
+    <welcome-file>favicon.ico</welcome-file>
+    <welcome-file>main-es2015.76f330693f26b8c9a2c2.js</welcome-file>
+    <welcome-file>main-es5.76f330693f26b8c9a2c2.js</welcome-file>
+    <welcome-file>polyfills-es2015.5b10b8fd823b6392f1fd.js</welcome-file>
+    <welcome-file>polyfills-es5.8e50a9832860f7cf804a.js</welcome-file>
+    <welcome-file>runtime-es2015.c5fa8325f89fc516600b.js</welcome-file>
+    <welcome-file>runtime-es5.c5fa8325f89fc516600b.js</welcome-file>
+    <welcome-file>styles.8c2f56770e840253a8ab.css</welcome-file>
   </welcome-file-list>
 </web-app>

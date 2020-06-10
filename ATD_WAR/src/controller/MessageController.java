@@ -39,4 +39,11 @@ public class MessageController {
 		
 		return messageService.getAllPerfomativs();
 	}
+	
+	@GET
+	@Path("/cn")
+	public void startCN() {
+		
+		messageService.startCN();
+	}
 }

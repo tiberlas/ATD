@@ -25,5 +25,7 @@ public interface HostAgentLocal extends Serializable {
 	void stopAgent(AID aid);
 	
 	@PreDestroy
-	void cleanUp();	
+	void cleanUp();
+	
+	void startCN();
 }

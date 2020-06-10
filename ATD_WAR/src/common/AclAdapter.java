@@ -55,10 +55,13 @@ public abstract class AclAdapter {
 			receivers[i++] = fromAIDToString(aid);
 		}
 		
-		UserArgDTO[] userArgs = new UserArgDTO[acl.getUserArgs().size()];
-		int ii = 0;
-		for(String key : acl.getUserArgs().keySet()) {
-			userArgs[ii++] = new UserArgDTO(key, acl.getUserArgs().get(key));
+		UserArgDTO[] userArgs = null;
+		if(acl.getUserArgs() != null) {
+			userArgs = new UserArgDTO[acl.getUserArgs().size()];
+			int ii = 0;
+			for(String key : acl.getUserArgs().keySet()) {
+				userArgs[ii++] = new UserArgDTO(key, acl.getUserArgs().get(key));
+			}
 		}
 		
 		return new AclDTO(

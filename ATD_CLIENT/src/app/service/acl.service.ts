@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { base_url } from 'src/environments/environment';
+import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { AclModel } from '../model/acl.model';
 
-const BASE_HTTP = base_url.http;
+const BASE_HTTP = environment.http;
 
 @Injectable({ providedIn: 'root' })
 export class AclService {
@@ -16,5 +16,9 @@ export class AclService {
 
     public sendAcl(msg: AclModel) {
         this.http.post(BASE_HTTP + '/messages', msg, { responseType: 'text' }).subscribe();
+    }
+
+    public startCN() {
+        this.http.get(BASE_HTTP + "/messages/cn", { responseType: 'text' }).subscribe();
     }
 }

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { base_url } from 'src/environments/environment';
+import { environment } from 'src/environments/environment';
 import { webSocket } from 'rxjs/webSocket';
 import { AclModel } from '../model/acl.model';
 
-const BASE_WS = base_url.ws;
+const BASE_WS = environment.ws;
 
 @Injectable({ providedIn: 'root' })
 export class LoggerService {
 
-    public log: string = '>> first log line\n';
+    public log: string = '';
     private ws;
 
     public WsConnect() {
@@ -16,8 +16,8 @@ export class LoggerService {
         console.log('WEB SOCKET ACL STARTED');
         this.ws.subscribe(
             (msg: AclModel) => {
-                alert("NEW MSG");
-                this.log += "\n>>" + JSON.stringify(msg);
+                //alert("NEW MSG");
+                this.log += "\n\n" + JSON.stringify(msg);
             },
             (err) => console.log(err),
             () => console.log('complete')

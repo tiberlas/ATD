@@ -20,8 +20,12 @@ public class StartUp {
 		System.out.println("SETING UP AGENT TYPES___________________________________________________________");
 		
 		AgentType test = new AgentType("test", "test-module");
+		AgentType iniator = new AgentType("iniator", "contract-net-module");
+		AgentType participant = new AgentType("participant", "contract-net-module");
 		
 		types.addType(test);
+		types.addType(iniator);
+		types.addType(participant);
 		
 	}
 }

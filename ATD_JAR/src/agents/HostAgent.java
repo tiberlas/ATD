@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
@@ -14,12 +13,14 @@ import ContractNet.IniatorAgentRemote;
 import agentManager.ActiveAgentManagerLocal;
 import agentManager.OnLineAgentManagerlocal;
 import common.JsonObjMapper;
+import config.CreateHostName;
 import messageManager.ACLSenderLocal;
 import model.ACL;
 import model.AID;
 import model.AgentType;
 import model.Host;
 import model.PerformativeENUM;
+import rest.messagesProtocol.MessagesSender;
 import ws.RunningAgentsWS;
 import ws.TypeWS;
 
@@ -31,27 +32,26 @@ public class HostAgent implements HostAgentLocal {
 
 	@EJB
 	private ActiveAgentManagerLocal activeManager;
-	
 	@EJB
 	private OnLineAgentManagerlocal onLineManager;
-	
 	@EJB
 	private ACLSenderLocal aclSender;
-	
 	@EJB
 	private JsonObjMapper jsonMapper;
-	
 	@EJB
 	private TypeWS typeWS;
-	
 	@EJB
 	private RunningAgentsWS runningAgentsWS;
 	
 	private Host host;
 	
-	@PostConstruct
-	public void setUp() {
-		host = new Host("master", "localhost", 8080);
+	@Override
+	public void setUp(List<Host> findedHosts) {
+		host = CreateHostName.create(findedHosts);
+		
+		if(host.getAlias().equals("master")) {
+			onLineManager.setMaster(null);
+		}
 	}
 	
 	@Override
@@ -63,11 +63,18 @@ public class HostAgent implements HostAgentLocal {
 
 		System.out.println(msg);
 		message.getReceiverAIDs().forEach(reciverAID -> {
-			if(activeManager.checkIfAgentExist(reciverAID)) {
-				Set<AID> forAgent = new HashSet<>();
-				forAgent.add(reciverAID);
-				msg.setReceiverAIDs(forAgent);
+			//salji samo 1 agentu
+			Set<AID> forAgent = new HashSet<>();
+			forAgent.add(reciverAID);
+			msg.setReceiverAIDs(forAgent);
+			
+			if(reciverAID.getHostAlias().equals(host.getAlias())) {
+				//acl je za lokalnog agenta
 				aclSender.sendACL(msg);
+			} else {
+				//acl mora da se posalje odgovarajucem cvoru
+				Host node = onLineManager.getHost(reciverAID.getHostAlias());
+				MessagesSender.sendACL(node, msg);
 			}
 		});
 	}

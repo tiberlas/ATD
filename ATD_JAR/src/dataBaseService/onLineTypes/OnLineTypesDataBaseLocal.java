@@ -16,9 +16,12 @@ public interface OnLineTypesDataBaseLocal {
 	
 	Map<String, Set<AgentType>> getAll();
 	Set<AgentType> getAllByHostAlias(String hostAlias);
+	Set<AgentType> getAllUniqueTypes();
 	
 	void addOnLineType(AgentType newType, String hostAlias);
 	void addSetOfOnLIneTypes(Set<AgentType> newSetOfTypes, String hostAlias);
+	
+	boolean checkIfExistsOnHost(AgentType type, String hostAlias);
 	
 	void removeAllOnHost(String hostAlias);
 	void removeOnLineType(AgentType type, String hostAlias);

@@ -30,6 +30,17 @@ public class OnLineTypesDataBase implements OnLineTypesDataBaseLocal{
 			return null;
 		}
 	}
+	
+	@Override
+	public Set<AgentType> getAllUniqueTypes() {
+		Set<AgentType> allTypes = new HashSet<AgentType>();
+		
+		onLineTypes.forEach((hostAlias, types) -> {
+			allTypes.addAll(types);
+		});
+		
+		return allTypes;
+	}
 
 	@Override
 	public void addOnLineType(AgentType newType, String hostAlias) {
@@ -71,5 +82,10 @@ public class OnLineTypesDataBase implements OnLineTypesDataBaseLocal{
 	@Override
 	public void cleanUp() {
 		onLineTypes.clear();
+	}
+
+	@Override
+	public boolean checkIfExistsOnHost(AgentType type, String hostAlias) {
+		return onLineTypes.get(hostAlias).contains(type);
 	}
 }

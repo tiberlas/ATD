@@ -13,6 +13,7 @@ import dataBaseService.onLineTypes.OnLineTypesDataBaseLocal;
 import model.AID;
 import model.AgentType;
 import model.Host;
+import ws.RunningAgentsWS;
 
 @Stateless
 @LocalBean
@@ -20,13 +21,13 @@ public class OnLineAgentManaer implements OnLineAgentManagerlocal {
 
 	@EJB
 	private OnLineHostsDataBaseLocal onLineHosts;
-	
 	@EJB
 	private OnLineAgentsDataBaseLocal onLineAgents;
-	
 	@EJB
 	private OnLineTypesDataBaseLocal onLineTypes;
-
+	@EJB
+	private RunningAgentsWS runningAgentsWS;
+	
 	@Override
 	public Host getMaster() {
 		return onLineHosts.getMasterNode();
@@ -34,6 +35,7 @@ public class OnLineAgentManaer implements OnLineAgentManagerlocal {
 
 	@Override
 	public void setMaster(Host master) {
+		System.out.println("MASTER IS: " + master);
 		onLineHosts.setMasterNode(master);
 	}
 	
@@ -75,6 +77,7 @@ public class OnLineAgentManaer implements OnLineAgentManagerlocal {
 	@Override
 	public void addHost(Host newHost) {
 		if(!onLineHosts.cheskIfExist(newHost.getAlias())) {
+			System.out.println("ADDED NODE: "+ newHost);
 			onLineHosts.addHostNode(newHost);
 		}
 		
@@ -83,16 +86,23 @@ public class OnLineAgentManaer implements OnLineAgentManagerlocal {
 	@Override
 	public void addHosts(Set<Host> hosts) {
 		onLineHosts.addHostNodes(hosts);
+		hosts.forEach(h -> {
+			System.out.println("ADDED NODE: " + h);
+		});
 	}
 
 	@Override
 	public void addTypes(Set<AgentType> types, String hostAlias) {
 		onLineTypes.addSetOfOnLIneTypes(types, hostAlias);
+		types.forEach(t -> {
+			System.out.println("ADDED TYPE: "+ t + " to node: "+ hostAlias);
+		});
 	}
 	
 	@Override
 	public void addType(AgentType type, String hostAlias) {
 		onLineTypes.addOnLineType(type, hostAlias);
+		System.out.println("ADDED TYPE: "+ type + " to node: "+ hostAlias);
 	}
 
 	@Override
@@ -105,23 +115,29 @@ public class OnLineAgentManaer implements OnLineAgentManagerlocal {
 	@Override
 	public void addAgent(AID aid) {
 		if(onLineHosts.cheskIfExist(aid.getHostAlias())) {
-			
 			if(onLineTypes.checkIfExistsOnHost(aid.getType(), aid.getHostAlias())) {
 				onLineAgents.addOnLineAgent(aid);
+				System.out.println("ADDED ON LINE AGENT: "+ aid);
+				runningAgentsWS.sendActiveAgent(aid);
 			}
 		}
 	}
 
 	@Override
 	public void removeHost(String hostAlias) {
+		runningAgentsWS.sendInactiveAgentSet(onLineAgents.getAllByHostAlias(hostAlias));
+		
 		onLineHosts.removeHostNode(hostAlias);
 		onLineAgents.removeAllOnHost(hostAlias);
 		onLineTypes.removeAllOnHost(hostAlias);
+		System.out.println("REMOVED NODE: " + hostAlias);
 	}
 
 	@Override
 	public void removeAgent(AID aid) {
 		onLineAgents.removeAgent(aid);
+		System.out.println("REMOVED ON LINE AGENT: "+aid);
+		runningAgentsWS.sendInactiveAgent(aid);
 	}
 
 	@Override

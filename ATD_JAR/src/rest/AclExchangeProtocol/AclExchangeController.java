@@ -1,4 +1,4 @@
-package rest.messagesProtocol;
+package rest.AclExchangeProtocol;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -15,13 +15,13 @@ import model.ACL;
 @Stateless
 @Path("/")
 @LocalBean
-public class MessagesController {
+public class AclExchangeController {
 
 	@EJB
 	private HostAgentLocal host;
 	
 	@POST
-	@Path("acl")
+	@Path("exchange/acl")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response sendACL(ACL acl) {
 		host.handleMessage(acl);

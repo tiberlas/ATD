@@ -12,11 +12,15 @@ import model.Host;
 public class HartBeatSender {
 
 	public static boolean checkNode(Host forNode) {
-		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target("http://"+forNode.getAddress()+":"+forNode.getPort()+"/ATD_WAR/ATD/node");
-		Response res = target.request().get();
-	
-		return (res.getStatus() == 200);
+		try {
+			ResteasyClient client = new ResteasyClientBuilder().build();
+			ResteasyWebTarget target = client.target("http://"+forNode.getAddress()+":"+forNode.getPort()+"/ATD_WAR/ATD/node");
+			Response res = target.request().get();
+		
+			return (res.getStatus() == 200);
+		} catch(Exception e) {
+			return false;
+		}
 	}
 
 }

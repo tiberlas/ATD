@@ -20,7 +20,7 @@ import model.AID;
 import model.AgentType;
 import model.Host;
 import model.PerformativeENUM;
-import rest.messagesProtocol.MessagesSender;
+import rest.AclExchangeProtocol.AclExchangeSender;
 import ws.RunningAgentsWS;
 import ws.TypeWS;
 
@@ -74,7 +74,7 @@ public class HostAgent implements HostAgentLocal {
 			} else {
 				//acl mora da se posalje odgovarajucem cvoru
 				Host node = onLineManager.getHost(reciverAID.getHostAlias());
-				MessagesSender.sendACL(node, msg);
+				AclExchangeSender.sendACL(node, msg);
 			}
 		});
 	}

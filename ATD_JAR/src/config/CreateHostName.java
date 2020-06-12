@@ -13,13 +13,16 @@ public abstract class CreateHostName {
         String ip;
 		try {
 			ip = InetAddress.getLocalHost().toString();
+			if(ip.contains("/")) {
+				ip = ip.split("/")[1];
+			}
 		} catch (UnknownHostException e1) {
-			ip = "localhost";
+			ip = "127.0.0.1";
 		}
 
         if(findedHostAgents == null || findedHostAgents.isEmpty()) {
 
-            return new Host("master", ip, 0);
+            return new Host("master", ip, 8080);
 		} else {
 			
 			int maxAgentNumber = -1;
@@ -41,7 +44,7 @@ public abstract class CreateHostName {
 			
 			String alias = "hostAgent"+ (++maxAgentNumber);
 
-            return new Host(alias, ip, 0);
+            return new Host(alias, ip, 8080);
 		}
 	}
 

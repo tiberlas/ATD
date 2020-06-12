@@ -2,7 +2,10 @@ package config;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,7 +26,8 @@ import model.Host;
 public class ServerDiscovery {
 
 	public List<Host> findHosts() {
-		
+		listIPAddresses2();
+		System.out.println("----------------");
 		List<String> potentialAddresses = listIPAddresses();
 		
 		List<Host> findedHostAgents = new ArrayList<Host>();
@@ -50,6 +54,10 @@ public class ServerDiscovery {
             return null;
         }
 
+		if(myIp[0] == 127 && myIp[1] == 0) {
+			return null;
+		}
+		
 		ExecutorService es = Executors.newCachedThreadPool();
         for(int i=3;i<=254;++i) {
         	
@@ -88,40 +96,70 @@ public class ServerDiscovery {
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		List<Host> findedHost = new ArrayList<Host>();
 		
-		int[] posiblePorts = new int[] {8080, 8081, 8082, 8083, 8084, 9090, 9091, 9092, 9093, 9094};
+		int[] posiblePorts = new int[] {8080, 8081, 8082, 8083};
 		
-		ExecutorService es = Executors.newCachedThreadPool();
 		for(int portNumber : posiblePorts) {
-  
-			es.execute(new Runnable() {
-                
-            	@Override
-            	public void run() {
-            		try {
-                    	System.out.println("try: "+potentialHostAddress+":"+portNumber);
-                    	ResteasyWebTarget target = client.target("http://"+potentialHostAddress+":"+portNumber+"/ATD_WAR/ATD/identify");
-                		Response response = target.request().get();
-                		if(response.getStatus() == 200) {
-                			String alias = response.readEntity(String.class);
-                			
-                			System.out.println("got response: "+ alias + " from "+potentialHostAddress + ":" +portNumber);
-                			findedHost.add(new Host(alias, potentialHostAddress, portNumber));
-                		}
-            			} catch(Exception e) {
-            				System.out.println("no response: "+potentialHostAddress + ":" +portNumber);
-            			}
-                }
-            });
+			try {
+            	String adr = "http://"+potentialHostAddress+":"+portNumber+"/ATD_WAR/ATD/identify";
+            	System.out.println(adr);
+            	ResteasyWebTarget target = client.target(adr);
+        		Response response = target.request().get();
+        		if(response.getStatus() == 200) {
+        			String alias = response.readEntity(String.class);
+        			
+        			System.out.println("got response: "+ alias + " from "+potentialHostAddress + ":" +portNumber);
+        			findedHost.add(new Host(alias, potentialHostAddress, portNumber));
+        		}
+			}catch(Exception e) {
+				//no response
+			}
         }
-		
-		//ceka dok se sve niti ne zavrsi tj maksimalno 3 sekunde
-		es.shutdown();
-		try {
-			es.awaitTermination(3, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 
 		return findedHost;
+	}
+	
+	
+	
+	//TEST
+	private void listIPAddresses2(){
+        /**
+         * ispise sve ip na koje sam zakacen za likalnu mrezu
+         * enp2s0f1 - 192.168.1.11
+         * vrtaio preko cega sam povezan i ip; teorijski mogu da proban da izvrtim sve ip uspomoc bazne
+         * */
+        Enumeration<NetworkInterface> net = null;
+        try { // get all interfaces; ethernet, wifi, virtual... etc
+            net = NetworkInterface.getNetworkInterfaces();
+        } catch (SocketException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (net == null){
+            throw new RuntimeException("No network interfaces found.");
+        }
+
+        while(net.hasMoreElements()){
+            NetworkInterface element = net.nextElement();
+            try {
+                if (element.isVirtual() || element.isLoopback()){
+                    // discard virtual and loopback interface (127.0.0.1)
+                    continue;
+                }
+
+                // rest are either Wifi or ethernet interfaces
+                // loop through and print the IPs
+                Enumeration<InetAddress> addresses = element.getInetAddresses();
+                while (addresses.hasMoreElements()){
+                    InetAddress ip = addresses.nextElement();
+                    if (ip instanceof Inet4Address){
+                        if (ip.isSiteLocalAddress()){
+                            System.out.println(element.getDisplayName() + " - " + ip.getHostAddress());
+                        }
+                    }
+                }
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
+        }
 	}
 }

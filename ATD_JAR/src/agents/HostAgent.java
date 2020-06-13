@@ -113,12 +113,11 @@ public class HostAgent implements HostAgentLocal {
 	
 	@Override
 	public void startAgent(AID aid) {
+		System.out.println("Started agent" + aid);
 		if(aid.getHostAlias().equals(host.getAlias())) {
 			//agent je kreiran na ovom cvoru
 			if(!activeManager.checkIfAgentExist(aid)) {
-				System.out.println("Started agent" + aid);
 				activeManager.startAgent(aid);
-				runningAgentsWS.sendActiveAgent(aid);
 				
 				//posalji svim cvorovima
 				if(onLineManager.getAllHosts().size() != 0) {
@@ -133,34 +132,31 @@ public class HostAgent implements HostAgentLocal {
 			}			
 		} else {
 			onLineManager.addAgent(aid);
-			runningAgentsWS.sendActiveAgent(aid);
 		}
 		
+		runningAgentsWS.sendActiveAgent(aid);
 	}
 	
 	@Override
 	public void stopAgent(AID aid) {
 		if(aid.getHostAlias().equals(host.getAlias())) {
 			//agent je zaustavljen na ovom cvoru
-			if(activeManager.checkIfAgentExist(aid)) {
-				System.out.println("Stopped agent" + aid);
-				activeManager.stopAgent(aid);
-				runningAgentsWS.sendInactiveAgent(aid);
-				
-				//javi ostalim cvorovima
-				if(onLineManager.getAllHosts().size() != 0) {
-					onLineManager.getAllHosts().forEach(node -> {
-						AgentExchangeSender.stopAgent(node, aid);
-					});
-				}
-				//posalji masteru
-				if(onLineManager.getMaster() != null) {
-					AgentExchangeSender.stopAgent(onLineManager.getMaster(), aid);
-				}
-			}
+			activeManager.stopAgent(aid);
 		} else {
 			onLineManager.removeAgent(aid);
-			runningAgentsWS.sendInactiveAgent(aid);
+		}
+		
+		System.out.println("Stopped agent" + aid);
+		runningAgentsWS.sendInactiveAgent(aid);
+		//javi ostalim cvorovima
+		if(onLineManager.getAllHosts().size() != 0) {
+			onLineManager.getAllHosts().forEach(node -> {
+				AgentExchangeSender.stopAgent(node, aid);
+			});
+		}
+		//posalji masteru
+		if(onLineManager.getMaster() != null) {
+			AgentExchangeSender.stopAgent(onLineManager.getMaster(), aid);
 		}
 	}
 	

@@ -9,7 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import agentManager.OnLineAgentManagerlocal;
+import agents.HostAgentLocal;
 import model.AID;
 
 @Stateless
@@ -18,13 +18,13 @@ import model.AID;
 public class AgentExchangeController {
 	
 	@EJB
-	private OnLineAgentManagerlocal onLineManager;
+	private HostAgentLocal host;
 	
 	@POST
 	@Path("exchange/agent/start")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response startAID(AID aid) {
-		onLineManager.addAgent(aid);
+		host.startAgent(aid);
 
 		System.out.println("=> REQUEST: POST: exchange/agent/start: "+ aid);
 		return Response.ok().build(); 
@@ -34,7 +34,7 @@ public class AgentExchangeController {
 	@Path("exchange/agent/stop")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response stopAID(AID aid) {
-		onLineManager.removeAgent(aid);
+		host.stopAgent(aid);
 
 		System.out.println("=> REQUEST: POST: exchange/agent/stop: "+ aid);
 		return Response.ok().build(); 

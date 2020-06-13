@@ -11,8 +11,6 @@ import agentManager.ActiveAgentManagerLocal;
 import agents.Agent;
 import common.JsonObjMapper;
 import model.ACL;
-import model.AID;
-import model.AgentType;
 
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),

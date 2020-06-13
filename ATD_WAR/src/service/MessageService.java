@@ -4,8 +4,6 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
-import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
-
 import agents.HostAgentLocal;
 import common.AclAdapter;
 import dto.AclDTO;

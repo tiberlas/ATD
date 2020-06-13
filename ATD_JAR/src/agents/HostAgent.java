@@ -67,7 +67,12 @@ public class HostAgent implements HostAgentLocal {
 			if(reciverAID.getHostAlias().equals(host.getAlias())) {
 				//acl je za lokalnog agenta
 				aclSender.sendACL(msg);
-			} else {
+			} else if(reciverAID.getHostAlias().equals("master")) {
+				//acl je za mastera
+				if(onLineManager.getMaster() != null) {
+					AclExchangeSender.sendACL(onLineManager.getMaster(), msg);
+				}
+			} else{
 				//acl mora da se posalje odgovarajucem cvoru
 				Host node = onLineManager.getHost(reciverAID.getHostAlias());
 				AclExchangeSender.sendACL(node, msg);
@@ -121,6 +126,10 @@ public class HostAgent implements HostAgentLocal {
 						AgentExchangeSender.startAgent(node, aid);
 					});
 				}
+				//posalji masteru
+				if(onLineManager.getMaster() != null) {
+					AgentExchangeSender.startAgent(onLineManager.getMaster(), aid);
+				}
 			}			
 		} else {
 			onLineManager.addAgent(aid);
@@ -143,6 +152,10 @@ public class HostAgent implements HostAgentLocal {
 					onLineManager.getAllHosts().forEach(node -> {
 						AgentExchangeSender.stopAgent(node, aid);
 					});
+				}
+				//posalji masteru
+				if(onLineManager.getMaster() != null) {
+					AgentExchangeSender.stopAgent(onLineManager.getMaster(), aid);
 				}
 			}
 		} else {

@@ -2,7 +2,6 @@ package agents;
 
 import java.io.Serializable;
 import java.util.Set;
-import java.util.List;
 
 import javax.annotation.PreDestroy;
 import javax.ejb.Local;
@@ -15,7 +14,7 @@ import model.Host;
 @Local
 public interface HostAgentLocal extends Serializable {
 
-	void setUp(List<Host> host);
+	void setUp(Host thisNode);
 	Host getHost();
 	void handleMessage(ACL message);
 	

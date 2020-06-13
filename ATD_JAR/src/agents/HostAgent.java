@@ -13,7 +13,6 @@ import ContractNet.IniatorAgentRemote;
 import agentManager.ActiveAgentManagerLocal;
 import agentManager.OnLineAgentManagerlocal;
 import common.JsonObjMapper;
-import config.CreateHostName;
 import messageManager.ACLSenderLocal;
 import model.ACL;
 import model.AID;
@@ -46,16 +45,8 @@ public class HostAgent implements HostAgentLocal {
 	private Host host;
 	
 	@Override
-	public void setUp(List<Host> findedHosts) {
-		if(findedHosts==null || findedHosts.isEmpty()) {
-			host = new Host("master", "192.168.56.1", 8080);
-		}
-		host = new Host("node1", "192.168.56.1", 8080);
-		//host = CreateHostName.create(findedHosts);
-		
-		if(host.getAlias().equals("master")) {
-			onLineManager.setMaster(null);
-		}
+	public void setUp(Host thisNode) {
+		host = thisNode;
 	}
 	
 	@Override

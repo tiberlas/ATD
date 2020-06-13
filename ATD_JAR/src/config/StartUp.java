@@ -36,12 +36,15 @@ public class StartUp {
 		types.addType(new AgentType("iniator", "contract-net-module"));
 		types.addType(new AgentType("participant", "contract-net-module"));
 
-		List<Host> findedHosts = serverDiscovery.findAllActiveNodes();
-		host.setUp(findedHosts);
-
+		Host master = CreateNode.createMasterNode();
+		List<Host> findedHosts = serverDiscovery.findAllActiveNodes(master.getAddress());
+		master.setAlias(CreateNode.createAlias(findedHosts));
+		host.setUp(master);
+		
 		System.out.println("-----------------------------------------------------------");
 		System.out.println("I am: " + host.getHost());
 		System.out.println("found "+ findedHosts);
+		
 		//ovaj host nije master pa pocinje handshake
 		if(findedHosts!=null && !findedHosts.isEmpty()) {
 			findedHosts.forEach(h -> {
@@ -56,6 +59,8 @@ public class StartUp {
 				host.setUp(null);
 				System.out.println("HAND SHAKE FALED");
 			}
+		} else {
+			onLineAgentManager.setMaster(null);
 		}
 	}
 	

@@ -27,11 +27,13 @@ public class HandShakeProtocol {
 			public void run() {
 				try {
 					//uzmi spisak tipova sa novog cvora
+					System.out.println("GET ALL TYPES");
 					if(!gotTypesFromNewNode(true, newNode)) {
 						handShakeFaild(newNode);
 						return;
 					}
 					
+					System.out.println("ALERT OTHER NODES THAT NEW NODE IS ADDED");
 					//salji ostalim cvorovima da je novi cvor dosao
 					Map<String, Set<AgentType>> types = new HashMap<String, Set<AgentType>>();
 					types.put(newNode.getAlias(), onLineAgentManager.getAllTypesFromHost(newNode));
@@ -42,15 +44,18 @@ public class HandShakeProtocol {
 						}
 					});
 					
+					System.out.println("SEND NEW NODE CLUSTER INFO");
 					//salji informacije o clusteru novom cvoru
 					if(!sendInfoAboutClusterToNewNode(true, newNode)) {
 						handShakeFaild(newNode);
 						return;
 					}
+					System.out.println("SEND NEW NODE TYPES INFO");
 					if(!sendInfoAboutTypesToNewNode(true, newNode)) {
 						handShakeFaild(newNode);
 						return;
 					}
+					System.out.println("SEND NEW NODE RUNNING AGENTS INFO");
 					if(!sendInfoAboutRunningAgentsToNewNode(true, newNode)) {
 						handShakeFaild(newNode);
 						return;

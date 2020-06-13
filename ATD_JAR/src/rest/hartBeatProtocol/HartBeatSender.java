@@ -14,6 +14,7 @@ public class HartBeatSender {
 	public static boolean checkNode(Host forNode) {
 		try {
 			ResteasyClient client = new ResteasyClientBuilder().build();
+			System.out.println("=> GET" + "http://"+forNode.getAddress()+":"+forNode.getPort()+"/ATD_WAR/ATD/node");
 			ResteasyWebTarget target = client.target("http://"+forNode.getAddress()+":"+forNode.getPort()+"/ATD_WAR/ATD/node");
 			Response res = target.request().get();
 		

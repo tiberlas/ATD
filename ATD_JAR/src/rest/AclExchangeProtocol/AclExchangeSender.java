@@ -16,6 +16,7 @@ public abstract class AclExchangeSender {
 	public static boolean sendACL(Host forHost, ACL acl) {
 		try {
 			ResteasyClient client = new ResteasyClientBuilder().build();
+			System.out.println("=> POST" + "http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/exchange/acl");
 			ResteasyWebTarget target = client.target("http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/exchange/acl");
 			Response res = target.request().post(Entity.entity(acl, MediaType.APPLICATION_JSON));
 		

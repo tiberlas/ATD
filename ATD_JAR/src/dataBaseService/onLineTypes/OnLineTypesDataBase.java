@@ -66,7 +66,7 @@ public class OnLineTypesDataBase implements OnLineTypesDataBaseLocal{
 	@Override
 	public void removeAllOnHost(String hostAlias) {
 		if(!onLineTypes.containsKey(hostAlias)) {
-			onLineTypes.get(hostAlias).clear();
+//			onLineTypes.get(hostAlias).clear();
 			onLineTypes.remove(hostAlias);
 		}
 	}

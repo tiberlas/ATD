@@ -20,16 +20,18 @@ public class HartBeatProtocol {
 	@Schedule(hour = "*", minute = "*", second = "*/40", info = "hart beat", persistent=false)
 	public void trigerHartBeat() {
 		
-		System.out.println("HartBeat protokol started");			
 		if(onLineManager.getAllHosts() == null || onLineManager.getAllHosts().isEmpty()) {
+			System.out.println("NO NODES FOR HART BEAT");
 			return;
 		}
 
+		System.out.println("HartBeat protokol started");			
 		List<String> fallenNodes = new ArrayList<String>();
 		onLineManager.getAllHosts().forEach(host -> {
 			if(!HartBeatSender.checkNode(host)) {
 				if(!HartBeatSender.checkNode(host)) {
 					fallenNodes.add(host.getAlias());
+					System.out.println("FALLEN NODE: " + host);
 				}
 			}
 		});

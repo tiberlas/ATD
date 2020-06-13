@@ -26,6 +26,7 @@ public class AgentExchangeController {
 	public Response gotAID(AID aid) {
 		onLineManager.addAgent(aid);
 
+		System.out.println("=> REQUEST: POST: exchange/agent: "+ aid);
 		return Response.ok().build(); 
 	}
 

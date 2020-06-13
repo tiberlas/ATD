@@ -16,6 +16,7 @@ public abstract class AgentExchangeSender {
 	public static boolean sendAgent(Host forHost, AID aid) {
 		try {
 			ResteasyClient client = new ResteasyClientBuilder().build();
+			System.out.println("=> POST" + "http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/exchange/agent");
 			ResteasyWebTarget target = client.target("http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/exchange/agent");
 			Response res = target.request().post(Entity.entity(aid, MediaType.APPLICATION_JSON));
 		

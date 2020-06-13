@@ -42,6 +42,7 @@ public class HandShakeController {
 			protocol.masterRecivedANewNode(newHostNode);
 		}
 		
+		System.out.println("=> REQUEST: POST: node (45) "+ newHostNode);
 		return Response.ok().build();
 	}
 	
@@ -51,6 +52,7 @@ public class HandShakeController {
 	public Response getNewHostNodes(Set<Host> newHostNodes) {
 		onLineAgentManager.addHosts(newHostNodes);
 		
+		System.out.println("=> REQUEST: POST: nodes (55) "+ newHostNodes);
 		return Response.ok().build();
 	}
 	
@@ -58,6 +60,7 @@ public class HandShakeController {
 	@Path("agents/classes")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Set<AgentType> getAllAgentTypes() {
+		System.out.println("=> REQUEST: GET: agent/classes");
 		return onLineAgentManager.getAllTypes();
 	}
 	
@@ -72,6 +75,7 @@ public class HandShakeController {
 			});
 		}
 		
+		System.out.println("=> REQUEST: POST: agent/classes (78) ");
 		return Response.ok().build();
 	}
 	

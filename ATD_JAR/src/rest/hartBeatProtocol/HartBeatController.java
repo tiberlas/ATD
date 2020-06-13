@@ -14,6 +14,7 @@ public class HartBeatController {
     @GET
 	@Path("node")
 	public Response getAllRegisteredUsers() {
+    	System.out.println("=> REQUEST: GET:node  hartbeat");
 		return Response.ok().build();
 	}
 

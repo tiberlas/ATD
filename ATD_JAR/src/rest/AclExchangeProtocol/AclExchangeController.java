@@ -26,6 +26,7 @@ public class AclExchangeController {
 	public Response sendACL(ACL acl) {
 		host.handleMessage(acl);
 
+		System.out.println("=> REQUEST: POST:exchange/acl");
 		return Response.ok().build(); 
 	}
 }

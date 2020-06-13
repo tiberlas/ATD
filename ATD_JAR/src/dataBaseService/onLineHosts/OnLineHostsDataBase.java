@@ -57,7 +57,9 @@ public class OnLineHostsDataBase implements OnLineHostsDataBaseLocal {
 
 	@Override
 	public void removeHostNode(Host hostNode) {
-		this.hostNodes.remove(hostNode);
+		if(hostNodes.contains(hostNode)) {
+			this.hostNodes.remove(hostNode);
+		}
 	}
 	
 	@Override
@@ -70,7 +72,9 @@ public class OnLineHostsDataBase implements OnLineHostsDataBaseLocal {
 	
 	@Override
 	public void removeHostNodes(Set<Host> hostNodes) {
-		
+		hostNodes.forEach(node -> {
+			removeHostNode(node);
+		});
 	}
 	
 	@Override

@@ -56,8 +56,11 @@ public class StartUp {
 			});
 			
 			if(!registerThisNodeToMaster(true)) {
-				host.setUp(null);
+				master.setAlias("master");
+				host.setUp(master);
+				onLineAgentManager.cleanUp();
 				System.out.println("HAND SHAKE FALED");
+				System.out.println("I am: " + host.getHost());
 			}
 		} else {
 			onLineAgentManager.setMaster(null);

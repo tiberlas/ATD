@@ -84,7 +84,9 @@ public class OnLineAgentsDataBase implements OnLineAgentsDataBaseLocal {
 	
 	@Override
 	public void removeAgent(AID agentAID) {
-		onLineAgents.remove(agentAID);
+		if(onLineAgents.contains(agentAID)) {
+			onLineAgents.remove(agentAID);
+		}
 	}
 	
 	@Override

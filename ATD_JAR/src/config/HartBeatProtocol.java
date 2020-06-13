@@ -1,13 +1,16 @@
 package config;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 
 import agentManager.OnLineAgentManagerlocal;
+import model.Host;
 import rest.handShakeProtocol.HandShakeSender;
 import rest.hartBeatProtocol.HartBeatSender;
 
@@ -20,11 +23,20 @@ public class HartBeatProtocol {
 	@Schedule(hour = "*", minute = "*", second = "*/40", info = "hart beat", persistent=false)
 	public void trigerHartBeat() {
 		
-		if(onLineManager.getAllHosts() == null || onLineManager.getAllHosts().isEmpty()) {
-			System.out.println("NO NODES FOR HART BEAT");
-			return;
+		Set<Host> nodes = new HashSet<Host>();
+		
+		if(onLineManager.getAllHosts() != null && !onLineManager.getAllHosts().isEmpty()) {
+			nodes.addAll(onLineManager.getAllHosts());
 		}
-
+		if(onLineManager.getMaster() != null) {
+			nodes.add(onLineManager.getMaster());
+		}
+		
+		System.out.println("NODES FOR HART BEAT "+ nodes);
+		if(nodes.isEmpty()) {
+			System.out.println("NO NODES FOR HART BEAT");			
+		}
+		
 		System.out.println("HartBeat protokol started");			
 		List<String> fallenNodes = new ArrayList<String>();
 		onLineManager.getAllHosts().forEach(host -> {

@@ -13,11 +13,24 @@ import model.Host;
 
 public abstract class AgentExchangeSender {
 
-	public static boolean sendAgent(Host forHost, AID aid) {
+	public static boolean startAgent(Host forHost, AID aid) {
 		try {
 			ResteasyClient client = new ResteasyClientBuilder().build();
-			System.out.println("=> POST" + "http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/exchange/agent");
-			ResteasyWebTarget target = client.target("http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/exchange/agent");
+			System.out.println("=> POST" + "http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/exchange/agent/start");
+			ResteasyWebTarget target = client.target("http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/exchange/agent/start");
+			Response res = target.request().post(Entity.entity(aid, MediaType.APPLICATION_JSON));
+		
+			return (res.getStatus() == 200);
+		} catch(Exception e) {
+			return false;
+		}
+	}
+	
+	public static boolean stopAgent(Host forHost, AID aid) {
+		try {
+			ResteasyClient client = new ResteasyClientBuilder().build();
+			System.out.println("=> POST" + "http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/exchange/agent/stop");
+			ResteasyWebTarget target = client.target("http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/exchange/agent/stop");
 			Response res = target.request().post(Entity.entity(aid, MediaType.APPLICATION_JSON));
 		
 			return (res.getStatus() == 200);

@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import agentManager.ActiveAgentManagerLocal;
 import agentManager.OnLineAgentManagerlocal;
 import model.AID;
 import model.AgentType;
@@ -20,6 +21,8 @@ public class HandShakeProtocol {
 
 	@EJB
 	private OnLineAgentManagerlocal onLineAgentManager;
+	@EJB
+	private ActiveAgentManagerLocal activeAgents;
 	
 	public void masterRecivedANewNode(Host newNode) {
 		new Thread(new Runnable() {
@@ -121,6 +124,9 @@ public class HandShakeProtocol {
 	private boolean sendInfoAboutRunningAgentsToNewNode(boolean firstAttempt, Host node) {
 		
 		Set<AID> aids = onLineAgentManager.getAllOnLineAgents();
+		if(activeAgents.getAllActiveAgents().size() != 0) {
+			aids.addAll(activeAgents.getAllActiveAgents());			
+		}
 		
 		if(HandShakeSender.addRunningAgenta(node, aids)) {
 			System.out.println("SEND LIST OF RUNNING AGENTS TO NODE: "+ node);

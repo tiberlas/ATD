@@ -20,6 +20,7 @@ import model.AgentType;
 import model.Host;
 import model.PerformativeENUM;
 import rest.AclExchangeProtocol.AclExchangeSender;
+import rest.AgentExchangeProtocol.AgentExchangeSender;
 import ws.RunningAgentsWS;
 import ws.TypeWS;
 
@@ -111,6 +112,12 @@ public class HostAgent implements HostAgentLocal {
 			System.out.println("Started agent" + aid);
 			activeManager.startAgent(aid);
 			runningAgentsWS.sendActiveAgent(aid);
+			
+			if(onLineManager.getAllHosts().size() != 0) {
+				onLineManager.getAllHosts().forEach(node -> {
+					AgentExchangeSender.startAgent(node, aid);
+				});
+			}
 		}
 	}
 	
@@ -120,6 +127,12 @@ public class HostAgent implements HostAgentLocal {
 			System.out.println("Stopped agent" + aid);
 			activeManager.stopAgent(aid);
 			runningAgentsWS.sendInactiveAgent(aid);
+			
+			if(onLineManager.getAllHosts().size() != 0) {
+				onLineManager.getAllHosts().forEach(node -> {
+					AgentExchangeSender.stopAgent(node, aid);
+				});
+			}
 		}
 	}
 	

@@ -42,7 +42,7 @@ public class HandShakeController {
 			protocol.masterRecivedANewNode(newHostNode);
 		}
 		
-		System.out.println("=> REQUEST: POST: node (45) "+ newHostNode);
+		System.out.println("=> REQUEST: POST: hand-shake/node (45) "+ newHostNode);
 		return Response.ok().build();
 	}
 	
@@ -52,7 +52,7 @@ public class HandShakeController {
 	public Response getNewHostNodes(Set<Host> newHostNodes) {
 		onLineAgentManager.addHosts(newHostNodes);
 		
-		System.out.println("=> REQUEST: POST: nodes (55) "+ newHostNodes);
+		System.out.println("=> REQUEST: POST: hand-shake/nodes (55) "+ newHostNodes);
 		return Response.ok().build();
 	}
 	
@@ -60,7 +60,7 @@ public class HandShakeController {
 	@Path("agents/classes")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Set<AgentType> getAllAgentTypes() {
-		System.out.println("=> REQUEST: GET: agent/classes");
+		System.out.println("=> REQUEST: GET: hand-shake/agent/classes");
 		return onLineAgentManager.getAllTypes();
 	}
 	
@@ -75,7 +75,7 @@ public class HandShakeController {
 			});
 		}
 		
-		System.out.println("=> REQUEST: POST: agent/classes (78) ");
+		System.out.println("=> REQUEST: POST: hand-shake/agent/classes (78): " + allTypes);
 		return Response.ok().build();
 	}
 	
@@ -85,6 +85,7 @@ public class HandShakeController {
 	public Response addAgents(Set<AID> aids) {
 		onLineAgentManager.addAgents(aids);
 		
+		System.out.println("=> REQUEST: POST: hand-shake/agent/running: " + aids);
 		return Response.ok().build();
 	}
 	
@@ -93,6 +94,7 @@ public class HandShakeController {
 	public Response removeNode(@PathParam("alias") String alias) {
 		onLineAgentManager.removeHost(alias);
 		
+		System.out.println("=> REQUEST: DELETE: hand-shake/node: " + alias);
 		return Response.ok().build();
 	}
 

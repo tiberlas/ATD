@@ -135,9 +135,11 @@ public class OnLineAgentManaer implements OnLineAgentManagerlocal {
 
 	@Override
 	public void removeAgent(AID aid) {
-		onLineAgents.removeAgent(aid);
-		System.out.println("REMOVED ON LINE AGENT: "+aid);
-		runningAgentsWS.sendInactiveAgent(aid);
+		if(onLineAgents.getAll().contains(aid)) {
+			onLineAgents.removeAgent(aid);
+			System.out.println("REMOVED ON LINE AGENT: "+aid);
+			runningAgentsWS.sendInactiveAgent(aid);
+		}
 	}
 
 	@Override

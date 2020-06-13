@@ -21,12 +21,22 @@ public class AgentExchangeController {
 	private OnLineAgentManagerlocal onLineManager;
 	
 	@POST
-	@Path("exchange/agent")
+	@Path("exchange/agent/start")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response gotAID(AID aid) {
+	public Response startAID(AID aid) {
 		onLineManager.addAgent(aid);
 
-		System.out.println("=> REQUEST: POST: exchange/agent: "+ aid);
+		System.out.println("=> REQUEST: POST: exchange/agent/start: "+ aid);
+		return Response.ok().build(); 
+	}
+	
+	@POST
+	@Path("exchange/agent/stop")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response stopAID(AID aid) {
+		onLineManager.removeAgent(aid);
+
+		System.out.println("=> REQUEST: POST: exchange/agent/stop: "+ aid);
 		return Response.ok().build(); 
 	}
 

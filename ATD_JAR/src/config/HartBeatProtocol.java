@@ -25,7 +25,7 @@ public class HartBeatProtocol {
 		
 		Set<Host> nodes = new HashSet<Host>();
 		
-		if(onLineManager.getAllHosts() != null && !onLineManager.getAllHosts().isEmpty()) {
+		if(onLineManager.getAllHosts() != null) {
 			nodes.addAll(onLineManager.getAllHosts());
 		}
 		if(onLineManager.getMaster() != null) {
@@ -34,7 +34,8 @@ public class HartBeatProtocol {
 		
 		System.out.println("NODES FOR HART BEAT "+ nodes);
 		if(nodes.isEmpty()) {
-			System.out.println("NO NODES FOR HART BEAT");			
+			System.out.println("NO NODES FOR HART BEAT");	
+			return;
 		}
 		
 		System.out.println("HartBeat protokol started");			

@@ -6,7 +6,7 @@ import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 
 import agentManager.ActiveAgentManagerLocal;
 import agentManager.OnLineAgentManagerlocal;
@@ -15,7 +15,7 @@ import model.AgentType;
 import model.Host;
 import rest.handShakeProtocol.HandShakeSender;
 
-@Stateless
+@Singleton
 @LocalBean
 public class HandShakeProtocol {
 
@@ -30,6 +30,8 @@ public class HandShakeProtocol {
 			public void run() {
 				try {
 					Thread.sleep(2000);
+					
+					System.out.println("ALL NODES "+onLineAgentManager.getAllHosts());
 					
 					//uzmi spisak tipova sa novog cvora
 					System.out.println("GET ALL TYPES");
@@ -48,7 +50,6 @@ public class HandShakeProtocol {
 							HandShakeSender.addAgentTypes(node, types);
 						}
 					});
-					
 					System.out.println("SEND NEW NODE CLUSTER INFO");
 					//salji informacije o clusteru novom cvoru
 					if(!sendInfoAboutClusterToNewNode(true, newNode)) {
@@ -78,7 +79,7 @@ public class HandShakeProtocol {
 		Set<AgentType> newTypes = HandShakeSender.getAllAgentTypes(node);
 		
 		if(newTypes != null) {
-			System.out.println("GOT TYPES FROM NODE: "+ node);
+			System.out.println("GOT TYPES FOR NODE: "+ node);
 			onLineAgentManager.addTypes(newTypes, node.getAlias());
 			
 			return true;
@@ -110,6 +111,9 @@ public class HandShakeProtocol {
 		
 		Map<String, Set<AgentType>> allTypes = onLineAgentManager.getAllTypesWithHost();
 		allTypes.remove(node.getAlias());
+
+		Set<AgentType> mytypes = activeAgents.getAllActiveTypes();
+		allTypes.put("master", mytypes);
 		
 		if(HandShakeSender.addAgentTypes(node, allTypes)) {
 			System.out.println("SEND LIST OF TYPES INFO TO NODE: "+ node);

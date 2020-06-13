@@ -114,7 +114,9 @@ public class OnLineAgentManaer implements OnLineAgentManagerlocal {
 	
 	@Override
 	public void addAgent(AID aid) {
+		System.out.println("AG");
 		if(onLineHosts.cheskIfExist(aid.getHostAlias())) {
+			System.out.println("HOST EXIST");
 			if(onLineTypes.checkIfExistsOnHost(aid.getType(), aid.getHostAlias())) {
 				onLineAgents.addOnLineAgent(aid);
 				System.out.println("ADDED ON LINE AGENT: "+ aid);

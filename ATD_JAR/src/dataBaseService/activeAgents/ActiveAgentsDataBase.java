@@ -28,7 +28,12 @@ public class ActiveAgentsDataBase implements ActiveAgentsDataBaseLocal {
 	
 	@Override
 	public Set<Agent> getAllAgents() {
-		return new HashSet<Agent>(runningAgents.values());
+		Set<Agent> agents = new HashSet<Agent>();
+		runningAgents.values().forEach(a -> {
+			agents.add(a);
+		});
+		
+		return agents;
 	}
 	
 	@Override

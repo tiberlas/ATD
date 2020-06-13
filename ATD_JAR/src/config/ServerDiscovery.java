@@ -22,31 +22,31 @@ public class ServerDiscovery {
         
         ResteasyClient client = new ResteasyClientBuilder().build();
         List<Host> foundHost = new ArrayList<Host>();
-        	
-        String[] vnetParts = nodeIp.split("\\.");
-    	
-    	String potentialHostAddress = vnetParts[0]+"."+vnetParts[1]+"."+vnetParts[2]+".";
-    	List<String> lastPartOfIp = new ArrayList<String>(Arrays.asList("1", "101", "102"));
-    	
-    	lastPartOfIp.forEach(p -> {
-    		if(!p.equals(vnetParts[3])) {
-    			try {
-                	String adr = "http://"+potentialHostAddress+p+":8080/ATD_WAR/ATD/identify";
-                	System.out.println("try to reach: "+adr);
-                	ResteasyWebTarget target = client.target(adr);
-            		Response response = target.request().get();
-            		if(response.getStatus() == 200) {
-            			String alias = response.readEntity(String.class);
-            			
-            			System.out.println("got response: "+ alias + " from "+potentialHostAddress+p);
-            			foundHost.add(new Host(alias, (potentialHostAddress+p), 8080));
-            		}
-    			}catch(Exception e) {
-    				//no response
-    			}
-    		}
-    		
-    	});
+//        	
+//        String[] vnetParts = nodeIp.split("\\.");
+//    	
+//    	String potentialHostAddress = vnetParts[0]+"."+vnetParts[1]+"."+vnetParts[2]+".";
+//    	List<String> lastPartOfIp = new ArrayList<String>(Arrays.asList("1", "101", "102"));
+//    	
+//    	lastPartOfIp.forEach(p -> {
+//    		if(!p.equals(vnetParts[3])) {
+//    			try {
+//                	String adr = "http://"+potentialHostAddress+p+":8080/ATD_WAR/ATD/identify";
+//                	System.out.println("try to reach: "+adr);
+//                	ResteasyWebTarget target = client.target(adr);
+//            		Response response = target.request().get();
+//            		if(response.getStatus() == 200) {
+//            			String alias = response.readEntity(String.class);
+//            			
+//            			System.out.println("got response: "+ alias + " from "+potentialHostAddress+p);
+//            			foundHost.add(new Host(alias, (potentialHostAddress+p), 8080));
+//            		}
+//    			}catch(Exception e) {
+//    				//no response
+//    			}
+//    		}
+//    		
+//    	});
         
         return foundHost;
 	}

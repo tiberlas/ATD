@@ -16,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import agentManager.ActiveAgentManagerLocal;
 import agentManager.OnLineAgentManagerlocal;
 import config.HandShakeProtocol;
 import model.AID;
@@ -29,6 +30,8 @@ public class HandShakeController {
 
 	@EJB
 	private OnLineAgentManagerlocal onLineAgentManager;
+	@EJB
+	private ActiveAgentManagerLocal activeAgents;
 	@EJB
 	private HandShakeProtocol protocol;
 	
@@ -57,11 +60,19 @@ public class HandShakeController {
 	}
 	
 	@GET
+	@Path("nodes")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Set<Host> getAllNodes() {
+		return onLineAgentManager.getAllHosts();
+	}
+	
+	@GET
 	@Path("agents/classes")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Set<AgentType> getAllAgentTypes() {
-		System.out.println("=> REQUEST: GET: hand-shake/agent/classes");
-		return onLineAgentManager.getAllTypes();
+		System.out.println("=> REQUEST: GET: hand-shake/agent/classes: " + activeAgents.getAllActiveTypes());
+		
+		return activeAgents.getAllActiveTypes();
 	}
 	
 	@POST

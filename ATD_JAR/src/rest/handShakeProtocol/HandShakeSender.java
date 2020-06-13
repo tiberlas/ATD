@@ -38,7 +38,7 @@ public abstract class HandShakeSender {
 	public static boolean addNewNodes(Host forHost, Set<Host> newHostNodes) {
 		try {
 			ResteasyClient client = new ResteasyClientBuilder().build();
-			System.out.println("=> POST" + "http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/hand-shake/nodes");
+			System.out.println("=> POST" + "http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/hand-shake/nodes :" + newHostNodes);
 			ResteasyWebTarget target = client.target("http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/hand-shake/nodes");
 			Response res = target.request().post(Entity.entity(newHostNodes, MediaType.APPLICATION_JSON));
 			
@@ -52,8 +52,8 @@ public abstract class HandShakeSender {
 		
 		try {
 			ResteasyClient client = new ResteasyClientBuilder().build();
-			System.out.println("=> GET" + "http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/agents/classes");
-			ResteasyWebTarget target = client.target("http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/agents/classes");
+			System.out.println("=> GET" + "http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/hand-shake/agents/classes");
+			ResteasyWebTarget target = client.target("http://"+forHost.getAddress()+":"+forHost.getPort()+"/ATD_WAR/ATD/hand-shake/agents/classes");
 			Response res = target.request().get();
 			
 			if(res.getStatus() == 200) {

@@ -19,13 +19,18 @@ public class OnLineTypesDataBase implements OnLineTypesDataBaseLocal{
 
 	@Override
 	public Map<String, Set<AgentType>> getAll() {
-		return onLineTypes;
+		Map<String, Set<AgentType>> types = new HashMap<String, Set<AgentType>>();
+		onLineTypes.forEach((alias, t) -> {
+			types.put(alias, new HashSet<AgentType>(t));
+		});
+		
+		return types;
 	}
 
 	@Override
 	public Set<AgentType> getAllByHostAlias(String hostAlias) {
 		if(!onLineTypes.containsKey(hostAlias)) {
-			return onLineTypes.get(hostAlias);
+			return new HashSet<AgentType>(onLineTypes.get(hostAlias));
 		} else {
 			return null;
 		}

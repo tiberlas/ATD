@@ -8,9 +8,7 @@ import javax.ejb.Stateless;
 
 import org.omg.PortableServer.POAPackage.ObjectAlreadyActive;
 
-import ContractNet.IniatorAgent;
 import ContractNet.IniatorAgentRemote;
-import ContractNet.ParticipantAgent;
 import ContractNet.ParticipantAgentRemote;
 import agents.Agent;
 import agents.TestAgentRemote;

@@ -17,7 +17,12 @@ public class ActiveTypesDataBase implements ActiveTypesDataBaseLocal {
 	
 	@Override
 	public Set<AgentType> getAllTypes() {
-		return activeTypes;
+		Set<AgentType> types = new HashSet<AgentType>();
+		activeTypes.forEach(t -> {
+			types.add(t);
+		});
+		
+		return types;
 	}
 	
 	@Override

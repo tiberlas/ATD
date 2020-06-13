@@ -33,7 +33,12 @@ public class OnLineHostsDataBase implements OnLineHostsDataBaseLocal {
 	
 	@Override
 	public Set<Host> getAllHostNodes() {
-		return hostNodes;
+		Set<Host> hosts = new HashSet<Host>();
+		hostNodes.forEach(h -> {
+			hosts.add(h);
+		});
+		
+		return hosts;
 	}
 	
 	@Override
@@ -47,12 +52,18 @@ public class OnLineHostsDataBase implements OnLineHostsDataBaseLocal {
 	
 	@Override
 	public void addHostNode(Host newHostNode) {
-		this.hostNodes.add(newHostNode);
+		if(newHostNode != null) {
+			this.hostNodes.add(newHostNode);
+		}
 	}
 	
 	@Override
 	public void addHostNodes(Set<Host> hostNodes) {
-		this.hostNodes.addAll(hostNodes);
+		if(hostNodes != null && !hostNodes.isEmpty()) {
+			hostNodes.forEach(h -> {
+				addHostNode(h);
+			});
+		}
 	}
 
 	@Override
@@ -80,11 +91,14 @@ public class OnLineHostsDataBase implements OnLineHostsDataBaseLocal {
 	@Override
 	public boolean cheskIfExist(String hostAlias) {
 		
-		Optional<Host> h = hostNodes.stream().
-				filter(node -> node.getAlias().equals(hostAlias))
-				.findFirst();
+		boolean ret = false;
 		
-		return h.isPresent();
+		for(Host h : hostNodes) {
+			if(h.getAlias().equals(hostAlias)) {
+				ret = true;
+			}
+		}
+		return ret;
 	}
 	
 	@PreDestroy

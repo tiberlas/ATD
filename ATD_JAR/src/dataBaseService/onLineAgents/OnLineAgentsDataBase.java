@@ -18,7 +18,12 @@ public class OnLineAgentsDataBase implements OnLineAgentsDataBaseLocal {
 	
 	@Override
 	public Set<AID> getAll() {
-		return onLineAgents;
+		Set<AID> aids = new HashSet<AID>();
+		onLineAgents.forEach(aid -> {
+			aids.add(aid);
+		});
+		
+		return aids;
 	}
 	
 	@Override

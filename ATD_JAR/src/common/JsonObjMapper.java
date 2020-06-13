@@ -19,4 +19,11 @@ public class JsonObjMapper {
 		Gson gson = new Gson();
         return gson.fromJson(json, cl);
 	}
+	
+	public Object deepCopy(Object obj) {
+		@SuppressWarnings("rawtypes")
+		Class cl = obj.getClass();
+		
+		return JsonToObj(objToJson(obj), cl);
+	}
 }

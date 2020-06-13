@@ -23,7 +23,7 @@ import model.AgentType;
 import model.Host;
 
 @Stateless
-@Path("/")
+@Path("/hand-shake")
 @LocalBean
 public class HandShakeController {
 

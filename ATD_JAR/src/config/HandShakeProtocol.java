@@ -26,6 +26,8 @@ public class HandShakeProtocol {
 			@Override
 			public void run() {
 				try {
+					Thread.sleep(2000);
+					
 					//uzmi spisak tipova sa novog cvora
 					System.out.println("GET ALL TYPES");
 					if(!gotTypesFromNewNode(true, newNode)) {

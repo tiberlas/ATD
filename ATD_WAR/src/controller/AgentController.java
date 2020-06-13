@@ -34,7 +34,7 @@ public class AgentController {
 	@Path("/classes")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Set<TypeDTO> getAllAgentTypes() {
-		
+		System.out.println("SEND ALL TYPES");
 		return typeService.getAllTypes();
 	}
 	

@@ -24,10 +24,9 @@ public class ServerDiscovery {
         List<Host> foundHost = new ArrayList<Host>();
         	
         String[] vnetParts = nodeIp.split("\\.");
-    	//int me = Integer.parseInt(vnetParts[3]);
     	
     	String potentialHostAddress = vnetParts[0]+"."+vnetParts[1]+"."+vnetParts[2]+".";
-    	List<String> lastPartOfIp = new ArrayList<String>(Arrays.asList("1", "101", "102", "103"));
+    	List<String> lastPartOfIp = new ArrayList<String>(Arrays.asList("1", "101", "102"));
     	
     	lastPartOfIp.forEach(p -> {
     		if(!p.equals(vnetParts[3])) {

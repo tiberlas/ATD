@@ -47,7 +47,11 @@ public class HostAgent implements HostAgentLocal {
 	
 	@Override
 	public void setUp(List<Host> findedHosts) {
-		host = CreateHostName.create(findedHosts);
+		if(findedHosts==null || findedHosts.isEmpty()) {
+			host = new Host("master", "192.168.56.1", 8080);
+		}
+		host = new Host("node1", "192.168.56.1", 8080);
+		//host = CreateHostName.create(findedHosts);
 		
 		if(host.getAlias().equals("master")) {
 			onLineManager.setMaster(null);

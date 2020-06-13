@@ -3,7 +3,6 @@ package config;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -19,8 +18,6 @@ import rest.handShakeProtocol.HandShakeSender;
 @Singleton
 public class StartUp {
 
-	@EJB
-	private HartBeatProtocol hartBeat;
 	@EJB
 	private ActiveTypesDataBaseLocal types;
 	@EJB
@@ -38,11 +35,8 @@ public class StartUp {
 		types.addType(new AgentType("test", "test-module"));
 		types.addType(new AgentType("iniator", "contract-net-module"));
 		types.addType(new AgentType("participant", "contract-net-module"));
-		
-		//stop all timers
-		hartBeat.stopTimer();
-		
-		List<Host> findedHosts = serverDiscovery.findHosts();
+
+		List<Host> findedHosts = serverDiscovery.findAllActiveNodes();
 		host.setUp(findedHosts);
 
 		System.out.println("-----------------------------------------------------------");
@@ -63,8 +57,6 @@ public class StartUp {
 				System.out.println("HAND SHAKE FALED");
 			}
 		}
-		
-		hartBeat.startTimer();
 	}
 	
 	private boolean registerThisNodeToMaster(boolean firstAttempt) {
@@ -77,10 +69,6 @@ public class StartUp {
 			return false;
 		}
 	}
-	
-	@PreDestroy
-	public void a () {
-		System.out.println("PRE DESTROY");
-	}
+
 
 }

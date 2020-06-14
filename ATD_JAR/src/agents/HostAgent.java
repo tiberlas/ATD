@@ -66,6 +66,8 @@ public class HostAgent implements HostAgentLocal {
 			
 			if(reciverAID.getHostAlias().equals(host.getAlias())) {
 				//acl je za lokalnog agenta
+				
+				System.out.println("ACL FOR AGENT:"+ activeManager.checkIfAgentExist(reciverAID));
 				aclSender.sendACL(msg);
 			} else if(reciverAID.getHostAlias().equals("master")) {
 				//acl je za mastera

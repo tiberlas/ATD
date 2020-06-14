@@ -40,7 +40,7 @@ public class HartBeatProtocol {
 		
 		System.out.println("HartBeat protokol started");			
 		List<String> fallenNodes = new ArrayList<String>();
-		onLineManager.getAllHosts().forEach(host -> {
+		nodes.forEach(host -> {
 			if(!HartBeatSender.checkNode(host)) {
 				if(!HartBeatSender.checkNode(host)) {
 					fallenNodes.add(host.getAlias());
@@ -50,8 +50,13 @@ public class HartBeatProtocol {
 		});
 		
 		//obrisemo sve pale cvorove iz zapisa od ovog host-a
-		fallenNodes.forEach(node -> {
-			onLineManager.removeHost(node);
+		fallenNodes.forEach(alias -> {
+			if(alias.equals("master")) {
+				onLineManager.setMaster(null);
+				System.out.println("MASTER NODE HAS FALLEN");
+			} else {
+				onLineManager.removeHost(alias);
+			}
 		});
 		
 		//preostalim cvorovima javimo da su ovi cvorovi pali
@@ -60,5 +65,10 @@ public class HartBeatProtocol {
 				HandShakeSender.remove(host, node);
 			});
 		});
+		if(onLineManager.getMaster()!=null) {
+			fallenNodes.forEach(node -> {
+				HandShakeSender.remove(onLineManager.getMaster(), node);
+			});
+		}
 	}
 }

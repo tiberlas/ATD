@@ -53,7 +53,8 @@ public class ACLSender implements ACLSenderLocal {
 			
 			defaultProducer.send(msg);
 		} catch(JMSException e) {
-			e.printStackTrace();
+			System.out.println("COULD NOT SEND ACL TO MDB");
+			//e.printStackTrace();
 		}
 	}
 

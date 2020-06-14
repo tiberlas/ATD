@@ -37,6 +37,11 @@ public class OnLineAgentManaer implements OnLineAgentManagerlocal {
 	public void setMaster(Host master) {
 		System.out.println("MASTER IS: " + master);
 		onLineHosts.setMasterNode(master);
+		try {
+			onLineAgents.removeAllOnHost("master");
+		} catch(Exception e) {
+			System.out.println("Init master");
+		}
 	}
 	
 	@Override

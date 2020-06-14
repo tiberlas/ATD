@@ -37,10 +37,9 @@ public class OnLineAgentManaer implements OnLineAgentManagerlocal {
 	public void setMaster(Host master) {
 		System.out.println("MASTER IS: " + master);
 		onLineHosts.setMasterNode(master);
-		try {
+		if(!onLineAgents.getAllByHostAlias("master").isEmpty()) {
+			runningAgentsWS.sendInactiveAgentSet(onLineAgents.getAllByHostAlias("master"));
 			onLineAgents.removeAllOnHost("master");
-		} catch(Exception e) {
-			System.out.println("Init master");
 		}
 	}
 	

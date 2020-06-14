@@ -65,10 +65,18 @@ public class HostAgent implements HostAgentLocal {
 			msg.setReceiverAIDs(forAgent);
 			
 			if(reciverAID.getHostAlias().equals(host.getAlias())) {
-				//acl je za lokalnog agenta
 				
-				System.out.println("ACL FOR AGENT:"+ activeManager.checkIfAgentExist(reciverAID));
-				aclSender.sendACL(msg);
+				if(message.getLanguage()!=null && message.getLanguage().equals("contract-net") && 
+						message.getProtocol()!=null && message.getProtocol().equals("init contract-net") &&
+						message.getPerformative()!=null && message.getPerformative().equals(PerformativeENUM.CFP) &&
+						message.getSenderAID() == null) {
+					//pokreni CN
+					startCN();
+				} else {
+					//acl je za lokalnog agenta
+					System.out.println("ACL FOR AGENT:"+ activeManager.checkIfAgentExist(reciverAID));
+					aclSender.sendACL(msg);
+				}
 			} else if(reciverAID.getHostAlias().equals("master")) {
 				//acl je za mastera
 				if(onLineManager.getMaster() != null) {
@@ -141,24 +149,28 @@ public class HostAgent implements HostAgentLocal {
 	
 	@Override
 	public void stopAgent(AID aid) {
-		if(aid.getHostAlias().equals(host.getAlias())) {
-			//agent je zaustavljen na ovom cvoru
-			activeManager.stopAgent(aid);
-		} else {
-			onLineManager.removeAgent(aid);
-		}
-		
-		System.out.println("Stopped agent" + aid);
-		runningAgentsWS.sendInactiveAgent(aid);
-		//javi ostalim cvorovima
-		if(onLineManager.getAllHosts().size() != 0) {
-			onLineManager.getAllHosts().forEach(node -> {
-				AgentExchangeSender.stopAgent(node, aid);
-			});
-		}
-		//posalji masteru
-		if(onLineManager.getMaster() != null) {
-			AgentExchangeSender.stopAgent(onLineManager.getMaster(), aid);
+		try {
+			if(aid.getHostAlias().equals(host.getAlias())) {
+				//agent je zaustavljen na ovom cvoru
+				activeManager.stopAgent(aid);
+			} else {
+				onLineManager.removeAgent(aid);
+			}
+			
+			System.out.println("Stopped agent" + aid);
+			runningAgentsWS.sendInactiveAgent(aid);
+			//javi ostalim cvorovima
+			if(onLineManager.getAllHosts().size() != 0) {
+				onLineManager.getAllHosts().forEach(node -> {
+					AgentExchangeSender.stopAgent(node, aid);
+				});
+			}
+			//posalji masteru
+			if(onLineManager.getMaster() != null) {
+				AgentExchangeSender.stopAgent(onLineManager.getMaster(), aid);
+			}
+		} catch(Exception e) {
+			System.out.println("stopt on line agent");
 		}
 	}
 	
@@ -173,6 +185,7 @@ public class HostAgent implements HostAgentLocal {
 		final AgentType participantType = new AgentType("participant", "contract-net-module");
 		
 		Set<AID> all = activeManager.getAllActiveAgents();
+		all.addAll(onLineManager.getAllOnLineAgents());
 		List<AID> iniators = new ArrayList<AID>();
 		Set<AID> participants = new HashSet<AID>();
 		
@@ -185,8 +198,34 @@ public class HostAgent implements HostAgentLocal {
 		});
 		
 		if(iniators.size() > 0 && participants.size() > 0) {
-			IniatorAgentRemote iag = (IniatorAgentRemote) activeManager.getAgent(iniators.get(0));
-			iag.startedCFP(participants);
+			AID iniatorAID = iniators.get(0);
+			if(iniatorAID.getHostAlias().equals(host.getAlias())) {
+				IniatorAgentRemote iag = (IniatorAgentRemote) activeManager.getAgent(iniatorAID);
+				iag.startedCFP(participants);
+				
+				ACL response = new ACL();
+				
+				response.setReceiverAIDs(participants);
+				response.setSenderAID(iniatorAID);
+				response.setLanguage("contract-net");
+				response.setPerformative(PerformativeENUM.CFP);
+				
+				System.out.println("INIATOR CFP");
+				System.out.println(response);
+				handleMessage(response);
+			} else {
+				ACL startCN = new ACL();
+				
+				Set<AID> p = new HashSet<AID>();
+				p.add(iniatorAID);
+				startCN.setReceiverAIDs(p);
+				startCN.setSenderAID(null);
+				startCN.setLanguage("contract-net");
+				startCN.setProtocol("init contract-net");
+				startCN.setPerformative(PerformativeENUM.CFP);
+				handleMessage(startCN);
+			}
+			
 		}
 	}
 	

@@ -96,17 +96,6 @@ public class IniatorAgent implements IniatorAgentRemote{
 		if(aids != null && aids.size() > 0) {
 			this.participants = aids;
 			this.accepted.clear();
-			
-			ACL response = new ACL();
-			
-			response.setReceiverAIDs(aids);
-			response.setSenderAID(aid);
-			response.setLanguage("contract-net");
-			response.setPerformative(PerformativeENUM.CFP);
-
-			System.out.println("INIATOR CFP");
-			System.out.println(response);
-			aclSender.sendACL(response);
 		}
 	}
 	

@@ -53,41 +53,50 @@ public class HostAgent implements HostAgentLocal {
 	@Override
 	public void handleMessage(ACL message) {
 		
-		//deep copy
-		String aclStringify = jsonMapper.objToJson(message);
-		ACL msg = (ACL) jsonMapper.JsonToObj(aclStringify, ACL.class);
-
-		System.out.println(msg);
-		message.getReceiverAIDs().forEach(reciverAID -> {
-			//salji samo 1 agentu
-			Set<AID> forAgent = new HashSet<>();
-			forAgent.add(reciverAID);
-			msg.setReceiverAIDs(forAgent);
+		new Thread(new Runnable() {
 			
-			if(reciverAID.getHostAlias().equals(host.getAlias())) {
-				
-				if(message.getLanguage()!=null && message.getLanguage().equals("contract-net") && 
-						message.getProtocol()!=null && message.getProtocol().equals("init contract-net") &&
-						message.getPerformative()!=null && message.getPerformative().equals(PerformativeENUM.CFP) &&
-						message.getSenderAID() == null) {
-					//pokreni CN
-					startCN();
-				} else {
-					//acl je za lokalnog agenta
-					System.out.println("ACL FOR AGENT:"+ activeManager.checkIfAgentExist(reciverAID));
-					aclSender.sendACL(msg);
-				}
-			} else if(reciverAID.getHostAlias().equals("master")) {
-				//acl je za mastera
-				if(onLineManager.getMaster() != null) {
-					AclExchangeSender.sendACL(onLineManager.getMaster(), msg);
-				}
-			} else{
-				//acl mora da se posalje odgovarajucem cvoru
-				Host node = onLineManager.getHost(reciverAID.getHostAlias());
-				AclExchangeSender.sendACL(node, msg);
+			@Override
+			public void run() {
+				//deep copy
+				String aclStringify = jsonMapper.objToJson(message);
+				ACL msg = (ACL) jsonMapper.JsonToObj(aclStringify, ACL.class);
+
+				System.out.println(msg);
+				message.getReceiverAIDs().forEach(reciverAID -> {
+					//salji samo 1 agentu
+					Set<AID> forAgent = new HashSet<>();
+					forAgent.add(reciverAID);
+					msg.setReceiverAIDs(forAgent);
+					
+					if(reciverAID.getHostAlias().equals(host.getAlias())) {
+						
+						if(message.getLanguage()!=null && message.getLanguage().equals("contract-net") && 
+								message.getProtocol()!=null && message.getProtocol().equals("init contract-net") &&
+								message.getPerformative()!=null && message.getPerformative().equals(PerformativeENUM.CFP) &&
+								message.getSenderAID() == null) {
+							//pokreni CN
+							startCN();
+						} else {
+							//acl je za lokalnog agenta
+							System.out.println("ACL FOR LOCAL AGENT:"+ message);
+							aclSender.sendACL(msg);
+						}
+					} else if(reciverAID.getHostAlias().equals("master")) {
+						//acl je za mastera
+						if(onLineManager.getMaster() != null) {
+							System.out.println("ACL FOR MASTER:"+ message);
+							AclExchangeSender.sendACL(onLineManager.getMaster(), msg);
+						}
+					} else{
+						//acl mora da se posalje odgovarajucem cvoru
+						System.out.println("ACL FOR REMOTE AGENT:"+ message);
+						Host node = onLineManager.getHost(reciverAID.getHostAlias());
+						AclExchangeSender.sendACL(node, msg);
+					}
+				});
 			}
-		});
+		}).start();
+		
 	}
 
 	@Override
@@ -181,6 +190,7 @@ public class HostAgent implements HostAgentLocal {
 	
 	@Override
 	public void startCN() {
+		System.out.println("INIATOR CFP");
 		final AgentType iniatorType = new AgentType("iniator", "contract-net-module");
 		final AgentType participantType = new AgentType("participant", "contract-net-module");
 		
@@ -210,7 +220,6 @@ public class HostAgent implements HostAgentLocal {
 				response.setLanguage("contract-net");
 				response.setPerformative(PerformativeENUM.CFP);
 				
-				System.out.println("INIATOR CFP");
 				System.out.println(response);
 				handleMessage(response);
 			} else {

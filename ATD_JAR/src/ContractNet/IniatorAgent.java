@@ -10,7 +10,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Remote;
 import javax.ejb.Stateful;
 
-import messageManager.ACLSenderLocal;
+import agents.HostAgentLocal;
 import model.ACL;
 import model.AID;
 import model.PerformativeENUM;
@@ -28,7 +28,7 @@ public class IniatorAgent implements IniatorAgentRemote{
 	private Map<AID, Integer> accepted = new HashMap<AID, Integer>();
 	
 	@EJB
-	private ACLSenderLocal aclSender;
+	private HostAgentLocal host;
 	@EJB
 	private ACLWS aclws;
 	
@@ -80,7 +80,7 @@ public class IniatorAgent implements IniatorAgentRemote{
 			System.out.println(aid + ": SUCESSFULLY DONE");
 		} if(msg.getPerformative().equals(PerformativeENUM.FAILURE)) {
 		
-			logMsg("JOB FAILD BY" + sender);
+			logMsg("JOB FAILD BY " + sender);
 			System.out.println(aid + ": FAILD");
 		} else {
 			
@@ -134,13 +134,13 @@ public class IniatorAgent implements IniatorAgentRemote{
 			response.setSenderAID(aid);
 			response.setLanguage("contract-net");
 			response.setPerformative(PerformativeENUM.ACCEPT_PROPOSAL);
-			aclSender.sendACL(response);
+			host.handleMessage(response);
 			
 			recivers = accepted.keySet();
 			recivers.remove(minAid);
 			response.setReceiverAIDs(recivers);
 			response.setPerformative(PerformativeENUM.REJECT_PROPOSAL);
-			aclSender.sendACL(response);
+			host.handleMessage(response);
 		}
 	}
 
@@ -159,7 +159,7 @@ public class IniatorAgent implements IniatorAgentRemote{
 		response.setLanguage("contract-net");
 		response.setPerformative(PerformativeENUM.INFORM);
 		response.setContent(content);
-		aclSender.sendACL(response);
+		host.handleMessage(response);
 	}
 
 }

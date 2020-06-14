@@ -9,7 +9,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Remote;
 import javax.ejb.Stateful;
 
-import messageManager.ACLSenderLocal;
+import agents.HostAgentLocal;
 import model.ACL;
 import model.AID;
 import model.PerformativeENUM;
@@ -25,7 +25,7 @@ public class ParticipantAgent implements ParticipantAgentRemote {
 	private AID aid;
 	
 	@EJB
-	private ACLSenderLocal aclSender;
+	private HostAgentLocal host;
 	@EJB
 	private ACLWS aclws;
 	
@@ -66,8 +66,7 @@ public class ParticipantAgent implements ParticipantAgentRemote {
 				System.out.println(aid + ": My bid is " + rndNum);
 			}
 			
-			aclSender.sendACL(response);
-			
+			host.handleMessage(response);
 		} else if(msg.getPerformative().equals(PerformativeENUM.ACCEPT_PROPOSAL)) {
 			
 			int rndNum = getRandomNumber();
@@ -84,8 +83,7 @@ public class ParticipantAgent implements ParticipantAgentRemote {
 				System.out.println(aid + ": Successfuly done");
 			}
 			
-			aclSender.sendACL(response);
-			
+			host.handleMessage(response);
 		} else if(msg.getPerformative().equals(PerformativeENUM.REJECT_PROPOSAL)) {
 			
 			iniator.clear();
